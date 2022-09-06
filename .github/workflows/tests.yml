@@ -45,16 +45,19 @@ jobs:
           cache-dependency-path: "backend/go.sum"
 
       - name: Run Unit tests
-        run: go test -v -race -coverpkg=./... -coverprofile=coverage.out -covermode=atomic ./...
+        run: |
+          cd ./backend
+          go generate ./...
+          go test -v -race -coverpkg=./... -coverprofile=coverage.out -covermode=atomic ./...
 
       - name: Clean test coverage
-        run: cat coverage.out | grep -v -e "_easyjson.go" -e "main.go" > cover.out
+        run: cat ./backend/coverage.out | grep -v -e "_easyjson.go" -e "main.go" > cover.out
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./cover.out
+          files: ./backend/cover.out
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
