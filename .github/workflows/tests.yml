@@ -14,8 +14,9 @@ jobs:
     name: Run linters
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-go@v3
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: ./
         with:
           go-version-file: backend/go.mod
 
