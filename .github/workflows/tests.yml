@@ -16,18 +16,20 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-        with:
-          path: backend
 
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version-file: "go.mod"
-#          cache: true
-          cache-dependency-path: "go.sum"
+          cache: true
+          go-version-file: "backend/go.mod"
+          cache-dependency-path: "backend/go.sum"
 
-      - name: Run GolangCI-Lint # https://github.com/golangci/golangci-lint
-        run: docker run --rm -t -v $(pwd):/app -w /app golangci/golangci-lint:v1.48-alpine golangci-lint run -v
+      - name: Run GolangCI-Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.49
+          working-directory: backend
+          skip-cache: true
 
   test:
     name: Unit tests
@@ -41,9 +43,9 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version-file: "go.mod"
-#          cache: true
-          cache-dependency-path: "go.sum"
+          cache: true
+          go-version-file: "backend/go.mod"
+          cache-dependency-path: "backend/go.sum"
 
       - name: Run Unit tests
         run: go test -v -race -coverpkg=./... -coverprofile=coverage.out -covermode=atomic ./...
