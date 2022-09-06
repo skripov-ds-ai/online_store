@@ -1,4 +1,4 @@
-name: tests
+name: linters
 
 on:
   push:
@@ -11,6 +11,21 @@ on:
 
 jobs:
   lint:
+    name: Run linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: backend/go.mod
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Run GolangCI-Lint # https://github.com/golangci/golangci-lint
+        run: docker run --rm -t -v $(pwd):/app -w /app golangci/golangci-lint:v1.48-alpine golangci-lint run -v
+
+  test:
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
