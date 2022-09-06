@@ -37,8 +37,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-        with:
-          path: backend
 
       - name: Set up Go
         uses: actions/setup-go@v3
@@ -48,7 +46,7 @@ jobs:
           cache-dependency-path: "backend/go.sum"
 
       - name: Run Unit tests
-        run: go test -v -race -coverpkg=./... -coverprofile=coverage.out -covermode=atomic ./...
+        run: go test -v -race -coverpkg=backend/... -coverprofile=coverage.out -covermode=atomic backend/...
 
       - name: Clean test coverage
         run: cat coverage.out | grep -v -e "_easyjson.go" -e "main.go" > cover.out
