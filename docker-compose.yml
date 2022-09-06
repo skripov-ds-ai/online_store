@@ -1,0 +1,9 @@
+version: '3.2'
+
+services:
+  shop:
+    build:
+      dockerfile: backend/Dockerfile
+      context: ./
+    ports:
+      - 8000:8000
